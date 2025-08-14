@@ -1,0 +1,73 @@
+# gandalf-app-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gandalf-app
+  labels:
+    app: gandalf
+spec:
+  replicas: 1  # Only 1 pod for quick test
+  selector:
+    matchLabels:
+      app: gandalf
+  template:
+    metadata:
+      labels:
+        app: gandalf
+      # Prometheus annotations for scraping metrics
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "80"
+    spec:
+      containers:
+        - name: gandalf-container
+          image: 024585201184.dkr.ecr.eu-north-1.amazonaws.com/gandalf-app:latest
+          ports:
+            - containerPort: 80  # Must match Spring Boot server port
+          # Liveness probe checks container is alive
+          livenessProbe:
+            httpGet:
+              path: /gandalf
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3
+          # Readiness probe checks container is ready to serve traffic
+          readinessProbe:
+            httpGet:
+              path: /gandalf
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      # Pull private image from ECR
+      imagePullSecrets:
+        - name: ecr-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gandalf-lb
+  labels:
+    app: gandalf
+  annotations:
+    # Assign the pre-allocated Elastic IP to the NLB
+    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-0a1f1aed5ffde90c5
+    # Optional: enable cross-zone load balancing
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    # Use NLB instead of classic ELB
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+spec:
+  type: LoadBalancer  # Exposes app via AWS NLB
+  # Optional: attach static EIP here if needed
+  # annotations:
+  #   service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-xxxxxxxx
+  selector:
+    app: gandalf
+  ports:
+    - port: 80       # External port
+      targetPort: 80 # Matches containerPort in Deployment
+      protocol: TCP

@@ -1,0 +1,54 @@
+# IntelliJ / JetBrains
+.idea/
+*.iml
+*.iws
+out/
+
+# Eclipse
+.settings/
+.project
+.classpath
+
+# Maven / Gradle
+target/
+build/
+.gradle/
+*.log
+
+# Spring Boot / Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+logs/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Node / frontend (if you have any)
+node_modules/
+
+# Kubernetes / Terraform / Helm
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+*.helmignore
+*.lock
+*.log
+
+# Prometheus / metrics
+prometheus.yml
+*.prom
+
+# Secrets / sensitive files
+*.pem
+*.key
+*.env
+
+aws/
+.terraform.lock.hcl
