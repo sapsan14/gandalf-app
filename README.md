@@ -1,4 +1,39 @@
-# Assignment for DevOps Engineer - AdCash
+## Test Assignment — DevOps Engineer
+
+### Exercise 1
+
+#### Step 1 — Web Server Deployment
+Write and deploy a web server application (in any language of your choice) to a Kubernetes cluster running in any cloud provider.  
+
+The application must meet the following requirements:
+- **Endpoints:**
+  - `/gandalf` — returns Gandalf’s picture.
+  - `/colombo` — returns the current time in Colombo, Sri Lanka, at the moment of the request.
+- **Networking:**
+  - Must run on a **static IP**.
+  - Only **port 80** should be open.
+- **Prometheus metrics:**
+  - Built-in Prometheus exporter.
+  - Metric: total number of requests to `/gandalf`.
+  - Metric: total number of requests to `/colombo`.
+
+#### Step 2 — Prometheus Deployment
+Deploy a Prometheus server using any configuration management tool.
+
+Requirements:
+- Create a **VM** in any cloud provider.
+- Deploy any version of **Prometheus** to that VM.
+- Configure Prometheus to **scrape metrics** from the web application.
+
+---
+
+### Deliverables
+- All code and configuration must be stored in a **public repository**.
+- Include a `README.md` describing your architecture, decisions, and choices.
+- **AI usage policy:**  
+  - Code must be **your own work**.  
+  - Using AI-generated code (e.g., ChatGPT, Cursor, etc.) for implementation may result in disqualification.  
+  - You may research best practices and documentation, but must be able to explain all work in detail.
 
 # Part I
 
